@@ -1,16 +1,16 @@
 # gulp-angular-boilerplate
 
-> Boilerplate to kickstart creating apps using [Gulp](http://gulpjs.com) + [AngularJS](https://angularjs.org) + [Jade](http://jade-lang.com) + [Stylus](http://learnboost.github.io/stylus) + [CoffeeScript](http://coffeescript.org)
+> Boilerplate to kickstart any project using [gulp](http://gulpjs.com) + [AngularJS](https://angularjs.org) + [Jade](http://jade-lang.com) + [Stylus](http://learnboost.github.io/stylus) + [CoffeeScript](http://coffeescript.org)
 
 
 ## Setup
 
-- Make sure [node.js](http://nodejs.org) is installed
-- Clone this repo and `cd` into the folder
-- Run `npm install`
-- Run `bower install`
+- make sure [Node.js](http://nodejs.org) is installed
+- clone this repo and `cd` into the folder
+- run `npm install`
+- run `bower install`
 - ???
-- Get money
+- get money
 
 ## License
 
