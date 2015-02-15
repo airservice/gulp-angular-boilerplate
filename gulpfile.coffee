@@ -5,6 +5,8 @@ coffee              = require 'gulp-coffee'
 inject              = require 'gulp-inject'
 sourcemaps          = require 'gulp-sourcemaps'
 ngAnnotate          = require 'gulp-ng-annotate'
+ngFilesort          = require 'gulp-angular-filesort'
+ngTemplatecache     = require 'gulp-angular-templatecache'
 
 del                 = require 'del'
 open                = require 'open'
@@ -15,6 +17,7 @@ historyApiFallback  = require 'connect-history-api-fallback'
 
 dir =
   tmp:       '.tmp'
+  views:     '/views'
   bower:     'bower_components'
 
 files =
@@ -64,7 +67,8 @@ gulp.task 'styles', ->
 gulp.task 'views', ->
   gulp.src files.views
     .pipe jade pretty: yes
-    .pipe gulp.dest tmpDir.views
+    .pipe ngTemplatecache root: dir.views
+    .pipe gulp.dest tmpDir.scripts
     .pipe browserSync.reload stream: yes
 
 
@@ -76,9 +80,10 @@ gulp.task 'index', ['scripts', 'styles'], ->
       gulp.src(bowerFiles(), read: no), name: 'bower'
     )
     .pipe inject(eventStream.merge(
-      gulp.src(tmpFiles.styles, cwd: dir.tmp, read: no)
+      gulp.src tmpFiles.styles, cwd: dir.tmp, read: no
     ,
-      gulp.src(tmpFiles.scripts, cwd: dir.tmp, read: no)
+      gulp.src tmpFiles.scripts, cwd: dir.tmp
+        .pipe ngFilesort()
     ))
     .pipe gulp.dest dir.tmp
     .pipe browserSync.reload stream: yes

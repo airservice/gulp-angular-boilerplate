@@ -9,7 +9,9 @@
  # Module of the application.
 ###
 
-angular.module('AppModule', ['ngRoute'])
+
+angular.module 'templates', []
+angular.module 'AppModule', ['ngRoute', 'templates']
 
 
 angular.module('AppModule')
@@ -20,8 +22,8 @@ angular.module('AppModule')
 
     $routeProvider
       .when '/',
-        templateUrl: 'views/main.html'
+        templateUrl: '/views/main.html'
         controller: 'MainController'
       .otherwise
         redirectTo: '/404'
-        templateUrl: 'views/404.html'
+        templateUrl: '/views/404.html'
