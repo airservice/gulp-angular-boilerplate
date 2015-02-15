@@ -109,5 +109,7 @@ gulp.task 'watch', ->
 
 
 # Register tasks
-gulp.task 'compile', ['scripts', 'styles', 'views', 'index']
+gulp.task 'compile', ['clean'], ->
+  gulp.start 'scripts', 'styles', 'views', 'index'
+
 gulp.task 'default', ['serve']
