@@ -8,15 +8,14 @@ ngAnnotate          = require 'gulp-ng-annotate'
 
 del                 = require 'del'
 open                = require 'open'
-vinylPaths          = require 'vinyl-paths'
 eventStream         = require 'event-stream'
 browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
 historyApiFallback  = require 'connect-history-api-fallback'
 
 dir =
-  cwd: './'
-  tmp: './.tmp/'
+  tmp:       '.tmp'
+  bower:     'bower_components'
 
 files =
   index:     'app/index.jade'
@@ -25,7 +24,6 @@ files =
   scripts:   'app/scripts/**/*.coffee'
 
 tmpDir =
-  root:      '.tmp'
   views:     '.tmp/views'
   styles:    '.tmp/styles'
   scripts:   '.tmp/scripts'
@@ -39,9 +37,8 @@ tmpFiles =
 
 
 # Clean tmp
-gulp.task 'clean', ->
-  gulp.src('.tmp/*')
-    .pipe vinylPaths(del)
+gulp.task 'clean', (cb) ->
+  del dir.tmp, cb
 
 
 # Compile coffee, generate source maps, reload
@@ -76,14 +73,14 @@ gulp.task 'index', ['scripts', 'styles'], ->
   gulp.src files.index
     .pipe jade pretty: yes
     .pipe inject(
-      gulp.src(bowerFiles(), cwd: dir.cwd, read: no), name: 'bower'
+      gulp.src(bowerFiles(), read: no), name: 'bower'
     )
     .pipe inject(eventStream.merge(
       gulp.src(tmpFiles.styles, cwd: dir.tmp, read: no)
     ,
       gulp.src(tmpFiles.scripts, cwd: dir.tmp, read: no)
     ))
-    .pipe gulp.dest tmpDir.root
+    .pipe gulp.dest dir.tmp
     .pipe browserSync.reload stream: yes
 
 
@@ -92,9 +89,9 @@ gulp.task 'serve', ['compile', 'watch'], ->
   browserSync
     notify: no
     server:
-      baseDir: '.tmp'
+      baseDir: dir.tmp
       routes:
-        '/bower_components': './bower_components'
+        '/bower_components': dir.bower
       middleware: [ historyApiFallback ]
 
 
