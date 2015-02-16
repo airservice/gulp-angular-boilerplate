@@ -1,37 +1,48 @@
 $white        = #FFFFFF
-$primary      = #A67372
-$secondary    = #EEEEEE
+$primary      = #8B8F98
+$secondary    = #A67372
+$tertiary     = #EEEEEE
 
 body
-  color: #8B8F97
   line-height: 1.6
   font-weight: 300
-  background-color: $secondary
+  background-color: $tertiary
   font-family: Helvetica, Arial, sans-serif
 
   .main
     max-width: 480px
     margin: 40px auto
     position: relative
-    background-color: $white
 
-    :before
+    &:before
       top: 0
       bottom: 0
       left: 50px
       width: 4px
       content: ''
       position: absolute
-      border-left: 1px solid $secondary
-      border-right: 1px solid $secondary
+      border-left: 1px solid $tertiary
+      border-right: 1px solid $tertiary
       z-index: 2
 
     .stack
+      display: block
+      color: $primary
+      position: relative
+      margin-bottom: 2px
+      text-decoration: none
+      background-color: $white
       padding: 20px 20px 20px 80px
-      border-bottom: 1px solid $secondary
+      transition: all 0.25s ease
+
+      &:last-child
+        margin-bottom: 0
+
+      &:hover
+        transform: translateX(10px)
 
       .title
-        color: $primary
+        color: $secondary
 
       .description
         font-size: 14px

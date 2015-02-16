@@ -1,4 +1,4 @@
-.stack(ng-repeat="stack in ::stackList")
+a.stack(ng-repeat="stack in ::stackList" ng-href="{{stack.url}}" target="_blank")
   .title
     | {{stack.title}}
   .description

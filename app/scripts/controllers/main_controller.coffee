@@ -21,7 +21,7 @@ angular.module('AppModule')
     ,
       'title': 'Jade'
       'url': 'http://jade-lang.com/'
-      'description': 'Clean, whitespace sensitive syntax for writing html'
+      'description': 'Clean, whitespace sensitive syntax for writing HTML'
     ,
       'title': 'Stylus'
       'url': 'http://learnboost.github.io/stylus/'
