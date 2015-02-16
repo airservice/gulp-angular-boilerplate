@@ -9,7 +9,6 @@
  # Module of the application.
 ###
 
-
 angular.module 'templates', []
 angular.module 'AppModule', ['ngRoute', 'templates']
 

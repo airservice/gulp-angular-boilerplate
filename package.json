@@ -19,6 +19,11 @@
     "gulp-ng-annotate": "^0.5.2",
     "gulp-sourcemaps": "^1.3.0",
     "gulp-stylus": "^2.0.0",
+    "jasmine-core": "^2.2.0",
+    "karma": "^0.12.31",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-jasmine": "^0.3.5",
+    "karma-phantomjs-launcher": "^0.1.4",
     "main-bower-files": "^2.5.0",
     "open": "0.0.5"
   }

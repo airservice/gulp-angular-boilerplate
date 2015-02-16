@@ -10,6 +10,7 @@ ngTemplatecache     = require 'gulp-angular-templatecache'
 
 del                 = require 'del'
 open                = require 'open'
+karma               = require 'karma'
 eventStream         = require 'event-stream'
 browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
@@ -25,6 +26,7 @@ files =
   views:     'app/views/**/*.jade'
   styles:    'app/styles/**/*.styl'
   scripts:   'app/scripts/**/*.coffee'
+  karma:     "#{__dirname}/karma.conf.coffee"
 
 tmpDir =
   views:     '.tmp/views'
@@ -98,6 +100,15 @@ gulp.task 'serve', ['compile', 'watch'], ->
       routes:
         '/bower_components': dir.bower
       middleware: [ historyApiFallback ]
+
+
+# Test using karma
+gulp.task 'test', ['scripts'], (cb) ->
+  karma.server.start {
+    singleRun: true
+    autoWatch: false
+    configFile: files.karma
+  }, cb
 
 
 # Watch for changes
