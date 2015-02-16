@@ -16,24 +16,24 @@ browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
 historyApiFallback  = require 'connect-history-api-fallback'
 
-dir =
+DIR =
   tmp:       '.tmp'
   views:     '/views'
   bower:     'bower_components'
 
-files =
+FILES =
   index:     'app/index.jade'
   views:     'app/views/**/*.jade'
   styles:    'app/styles/**/*.styl'
   scripts:   'app/scripts/**/*.coffee'
   karma:     "#{__dirname}/karma.conf.coffee"
 
-tmpDir =
+TEMP_DIR =
   views:     '.tmp/views'
   styles:    '.tmp/styles'
   scripts:   '.tmp/scripts'
 
-tmpFiles =
+TEMP_FILES =
   styles:    'styles/**/*.css'
   scripts:   'scripts/**/*.js'
 
@@ -43,51 +43,51 @@ tmpFiles =
 
 # Clean tmp
 gulp.task 'clean', (cb) ->
-  del dir.tmp, cb
+  del DIR.tmp, cb
 
 
 # Compile coffee, generate source maps, reload
 gulp.task 'scripts', ->
-  gulp.src files.scripts
+  gulp.src FILES.scripts
     .pipe sourcemaps.init()
     .pipe coffee bare: yes
     .pipe ngAnnotate single_quotes: yes
     .pipe sourcemaps.write()
-    .pipe gulp.dest tmpDir.scripts
+    .pipe gulp.dest TEMP_DIR.scripts
     .pipe browserSync.reload stream: yes
 
 
 # Compile stylus, reload
 gulp.task 'styles', ->
-  gulp.src files.styles
+  gulp.src FILES.styles
     .pipe stylus()
-    .pipe gulp.dest tmpDir.styles
+    .pipe gulp.dest TEMP_DIR.styles
     .pipe browserSync.reload stream: yes
 
 
 # Compile jade views, reload
 gulp.task 'views', ->
-  gulp.src files.views
+  gulp.src FILES.views
     .pipe jade pretty: yes
-    .pipe ngTemplatecache root: dir.views
-    .pipe gulp.dest tmpDir.scripts
+    .pipe ngTemplatecache root: DIR.views
+    .pipe gulp.dest TEMP_DIR.scripts
     .pipe browserSync.reload stream: yes
 
 
 # Compile jade index, inject styles and scripts, reload
 gulp.task 'index', ['scripts', 'styles'], ->
-  gulp.src files.index
+  gulp.src FILES.index
     .pipe jade pretty: yes
     .pipe inject(
       gulp.src(bowerFiles(), read: no), name: 'bower'
     )
     .pipe inject(eventStream.merge(
-      gulp.src tmpFiles.styles, cwd: dir.tmp, read: no
+      gulp.src TEMP_FILES.styles, cwd: DIR.tmp, read: no
     ,
-      gulp.src tmpFiles.scripts, cwd: dir.tmp
+      gulp.src TEMP_FILES.scripts, cwd: DIR.tmp
         .pipe ngFilesort()
     ))
-    .pipe gulp.dest dir.tmp
+    .pipe gulp.dest DIR.tmp
     .pipe browserSync.reload stream: yes
 
 
@@ -96,9 +96,9 @@ gulp.task 'serve', ['compile', 'watch'], ->
   browserSync
     notify: no
     server:
-      baseDir: dir.tmp
+      baseDir: DIR.tmp
       routes:
-        '/bower_components': dir.bower
+        '/bower_components': DIR.bower
       middleware: [ historyApiFallback ]
 
 
@@ -107,16 +107,16 @@ gulp.task 'test', ['scripts'], (cb) ->
   karma.server.start {
     singleRun: true
     autoWatch: false
-    configFile: files.karma
+    configFile: FILES.karma
   }, cb
 
 
 # Watch for changes
 gulp.task 'watch', ->
-  gulp.watch files.scripts, ['scripts']
-  gulp.watch files.styles,  ['styles']
-  gulp.watch files.views,   ['views']
-  gulp.watch files.index,   ['index']
+  gulp.watch FILES.scripts, ['scripts']
+  gulp.watch FILES.styles,  ['styles']
+  gulp.watch FILES.views,   ['views']
+  gulp.watch FILES.index,   ['index']
 
 
 # Register tasks
