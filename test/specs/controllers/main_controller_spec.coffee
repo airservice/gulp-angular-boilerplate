@@ -10,4 +10,5 @@ describe 'controllers', ->
     controller = $controller 'MainController', $scope: scope
 
   it 'should define more than 5 awesome things', ->
-    expect(scope.stack).toEqual('Gulp + AngularJS + Jade + Stylus + CoffeeScript')
+    expect(angular.isArray(scope.stackList)).toBeTruthy()
+    expect(scope.stackList.length).toEqual(5)

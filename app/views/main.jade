@@ -1,2 +1,5 @@
-.text
-  | {{::stack}}
+.stack(ng-repeat="stack in ::stackList")
+  .title
+    | {{stack.title}}
+  .description
+    | {{stack.description}}

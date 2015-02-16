@@ -1,11 +1,37 @@
+$white        = #FFFFFF
+$primary      = #A67372
+$secondary    = #EEEEEE
+
 body
-  color: #444
-  line-height: 2
+  color: #8B8F97
+  line-height: 1.6
   font-weight: 300
+  background-color: $secondary
   font-family: Helvetica, Arial, sans-serif
 
   .main
-    padding: 40px
-    max-width: 400px
+    max-width: 480px
     margin: 40px auto
-    text-align: center
+    position: relative
+    background-color: $white
+
+    :before
+      top: 0
+      bottom: 0
+      left: 50px
+      width: 4px
+      content: ''
+      position: absolute
+      border-left: 1px solid $secondary
+      border-right: 1px solid $secondary
+      z-index: 2
+
+    .stack
+      padding: 20px 20px 20px 80px
+      border-bottom: 1px solid $secondary
+
+      .title
+        color: $primary
+
+      .description
+        font-size: 14px

@@ -10,4 +10,24 @@
 
 angular.module('AppModule')
   .controller 'MainController', ($scope) ->
-    $scope.stack = 'Gulp + AngularJS + Jade + Stylus + CoffeeScript'
+    $scope.stackList = [
+      'title': 'Gulp'
+      'url': 'http://gulpjs.com/'
+      'description': 'The streaming build system'
+    ,
+      'title': 'AngularJS'
+      'url': 'https://angularjs.org/'
+      'description': 'HTML enhanced for web apps!'
+    ,
+      'title': 'Jade'
+      'url': 'http://jade-lang.com/'
+      'description': 'Clean, whitespace sensitive syntax for writing html'
+    ,
+      'title': 'Stylus'
+      'url': 'http://learnboost.github.io/stylus/'
+      'description': 'Expressive, robust, feature-rich CSS preprocessor'
+    ,
+      'title': 'CoffeeScript'
+      'url': 'http://coffeescript.org/'
+      'description': 'A little language that compiles into JavaScript'
+    ]
