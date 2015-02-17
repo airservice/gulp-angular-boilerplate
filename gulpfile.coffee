@@ -3,6 +3,7 @@ jade                = require 'gulp-jade'
 stylus              = require 'gulp-stylus'
 coffee              = require 'gulp-coffee'
 inject              = require 'gulp-inject'
+protractor          = require 'gulp-protractor'
 sourcemaps          = require 'gulp-sourcemaps'
 ngAnnotate          = require 'gulp-ng-annotate'
 ngFilesort          = require 'gulp-angular-filesort'
@@ -26,7 +27,6 @@ FILES =
   views:     'app/views/**/*.jade'
   styles:    'app/styles/**/*.styl'
   scripts:   'app/scripts/**/*.coffee'
-  karma:     "#{__dirname}/karma.conf.coffee"
 
 TEMP_DIR =
   views:     '.tmp/views'
@@ -36,6 +36,10 @@ TEMP_DIR =
 TEMP_FILES =
   styles:    'styles/**/*.css'
   scripts:   'scripts/**/*.js'
+
+TEST_CONF =
+  karma:          "#{__dirname}/karma.conf.coffee"
+  protractor:     "#{__dirname}/protractor.conf.coffee"
 
 
 # -------------------- Development -------------------- #
@@ -102,12 +106,40 @@ gulp.task 'serve', ['compile', 'watch'], ->
       middleware: [ historyApiFallback ]
 
 
+# Launch server for testing
+gulp.task 'serve:e2e', ['compile', 'watch'], ->
+  browserSync
+    notify: no
+    open: false
+    server:
+      baseDir: DIR.tmp
+      routes:
+        '/bower_components': DIR.bower
+      middleware: [ historyApiFallback ]
+
+
+# e2e test using protractor
+gulp.task 'webdriver-update', protractor.webdriver_update
+gulp.task 'webdriver_standalone', protractor.webdriver_standalone
+
+gulp.task 'protractor', ['serve:e2e', 'webdriver-update'], ->
+  gulp.src 'test/e2e/**/*.coffee'
+    .pipe protractor.protractor(
+      configFile: TEST_CONF.protractor
+      args: [ '--baseUrl', 'http://localhost:3000' ]
+    )
+    .on 'error', (err) ->
+      throw err
+    .on 'end', ->
+      browserSync.exit()
+
+
 # Test using karma
 gulp.task 'test', ['scripts'], (cb) ->
   karma.server.start {
     singleRun: true
     autoWatch: false
-    configFile: FILES.karma
+    configFile: TEST_CONF.karma
   }, cb
 
 
