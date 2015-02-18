@@ -20,7 +20,6 @@ historyApiFallback  = require 'connect-history-api-fallback'
 DIR =
   tmp:       '.tmp'
   views:     '/views'
-  bower:     'bower_components'
 
 FILES =
   index:     'app/index.jade'
@@ -32,10 +31,12 @@ TEMP_DIR =
   views:     '.tmp/views'
   styles:    '.tmp/styles'
   scripts:   '.tmp/scripts'
+  vendors:   '.tmp/scripts/vendors'
 
 TEMP_FILES =
   styles:    'styles/**/*.css'
-  scripts:   'scripts/**/*.js'
+  vendors:   'scripts/vendors/*.js'
+  scripts:   ['scripts/**/*.js', '!scripts/vendors/*.js']
 
 TEST_CONF =
   karma:          "#{__dirname}/karma.conf.coffee"
@@ -61,6 +62,12 @@ gulp.task 'scripts', ->
     .pipe browserSync.reload stream: yes
 
 
+# Copy bower files
+gulp.task 'bower', ->
+  gulp.src bowerFiles()
+    .pipe gulp.dest TEMP_DIR.vendors
+
+
 # Compile stylus, reload
 gulp.task 'styles', ->
   gulp.src FILES.styles
@@ -79,11 +86,13 @@ gulp.task 'views', ->
 
 
 # Compile jade index, inject styles and scripts, reload
-gulp.task 'index', ['scripts', 'styles'], ->
+gulp.task 'index', ['bower', 'scripts', 'styles'], ->
   gulp.src FILES.index
     .pipe jade pretty: yes
     .pipe inject(
-      gulp.src(bowerFiles(), read: no), name: 'bower'
+      gulp.src TEMP_FILES.vendors, cwd: DIR.tmp
+        .pipe ngFilesort()
+      name: 'bower'
     )
     .pipe inject(eventStream.merge(
       gulp.src TEMP_FILES.styles, cwd: DIR.tmp, read: no
@@ -101,8 +110,6 @@ gulp.task 'serve', ['compile', 'watch'], ->
     notify: no
     server:
       baseDir: DIR.tmp
-      routes:
-        '/bower_components': DIR.bower
       middleware: [ historyApiFallback ]
 
 
@@ -113,8 +120,6 @@ gulp.task 'serve:e2e', ['compile', 'watch'], ->
     open: false
     server:
       baseDir: DIR.tmp
-      routes:
-        '/bower_components': DIR.bower
       middleware: [ historyApiFallback ]
 
 
