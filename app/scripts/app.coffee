@@ -21,8 +21,8 @@ angular.module('AppModule')
 
     $routeProvider
       .when '/',
-        templateUrl: '/views/main.html'
+        templateUrl: '/templates/main.html'
         controller: 'MainController'
       .otherwise
         redirectTo: '/404'
-        templateUrl: '/views/404.html'
+        templateUrl: '/templates/404.html'

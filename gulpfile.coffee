@@ -18,29 +18,28 @@ bowerFiles          = require 'main-bower-files'
 historyApiFallback  = require 'connect-history-api-fallback'
 
 DIR =
-  tmp:       '.tmp'
-  views:     '/views'
+  tmp:              '.tmp'
+  templates:        '/templates'
 
 FILES =
-  index:     'app/index.jade'
-  views:     'app/views/**/*.jade'
-  styles:    'app/styles/**/*.styl'
-  scripts:   'app/scripts/**/*.coffee'
+  index:            'app/index.jade'
+  styles:           'app/styles/**/*.styl'
+  scripts:          'app/scripts/**/*.coffee'
+  templates:        'app/templates/**/*.jade'
 
 TEMP_DIR =
-  views:     '.tmp/views'
-  styles:    '.tmp/styles'
-  scripts:   '.tmp/scripts'
-  vendors:   '.tmp/scripts/vendors'
+  styles:           '.tmp/styles'
+  scripts:          '.tmp/scripts'
+  vendors:          '.tmp/scripts/vendors'
 
 TEMP_FILES =
-  styles:    'styles/**/*.css'
-  vendors:   'scripts/vendors/*.js'
-  scripts:   ['scripts/**/*.js', '!scripts/vendors/*.js']
+  styles:           'styles/**/*.css'
+  vendors:          'scripts/vendors/*.js'
+  scripts:          ['scripts/**/*.js', '!scripts/vendors/*.js']
 
 TEST_CONF =
-  karma:          "#{__dirname}/karma.conf.coffee"
-  protractor:     "#{__dirname}/protractor.conf.coffee"
+  karma:            "#{__dirname}/karma.conf.coffee"
+  protractor:       "#{__dirname}/protractor.conf.coffee"
 
 
 # -------------------- Development -------------------- #
@@ -76,11 +75,11 @@ gulp.task 'styles', ->
     .pipe browserSync.reload stream: yes
 
 
-# Compile jade views, reload
-gulp.task 'views', ->
-  gulp.src FILES.views
+# Compile jade templates, reload
+gulp.task 'templates', ->
+  gulp.src FILES.templates
     .pipe jade pretty: yes
-    .pipe ngTemplatecache root: DIR.views
+    .pipe ngTemplatecache root: DIR.templates
     .pipe gulp.dest TEMP_DIR.scripts
     .pipe browserSync.reload stream: yes
 
@@ -150,14 +149,14 @@ gulp.task 'test', ['scripts'], (cb) ->
 
 # Watch for changes
 gulp.task 'watch', ->
-  gulp.watch FILES.scripts, ['scripts']
-  gulp.watch FILES.styles,  ['styles']
-  gulp.watch FILES.views,   ['views']
-  gulp.watch FILES.index,   ['index']
+  gulp.watch FILES.index,       ['index']
+  gulp.watch FILES.styles,      ['styles']
+  gulp.watch FILES.scripts,     ['scripts']
+  gulp.watch FILES.templates,   ['templates']
 
 
 # Register tasks
 gulp.task 'compile', ['clean'], ->
-  gulp.start 'scripts', 'styles', 'views', 'index'
+  gulp.start 'scripts', 'styles', 'templates', 'index'
 
 gulp.task 'default', ['serve']
