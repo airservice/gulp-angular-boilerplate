@@ -1,13 +1,5 @@
 gulp                = require 'gulp'
-jade                = require 'gulp-jade'
-stylus              = require 'gulp-stylus'
-coffee              = require 'gulp-coffee'
-inject              = require 'gulp-inject'
-protractor          = require 'gulp-protractor'
-sourcemaps          = require 'gulp-sourcemaps'
-ngAnnotate          = require 'gulp-ng-annotate'
-ngFilesort          = require 'gulp-angular-filesort'
-ngTemplatecache     = require 'gulp-angular-templatecache'
+loadPlugins         = require 'gulp-load-plugins'
 
 del                 = require 'del'
 karma               = require 'karma'
@@ -19,6 +11,8 @@ historyApiFallback  = require 'connect-history-api-fallback'
 
 # -------------------- VARS -------------------- #
 
+
+$ = loadPlugins()
 
 DIR =
   tmp:              '.tmp'
@@ -56,10 +50,10 @@ gulp.task 'clean', (cb) ->
 # Compile coffee, generate source maps, reload
 gulp.task 'scripts', ->
   gulp.src FILES.scripts
-    .pipe sourcemaps.init()
-    .pipe coffee bare: yes
-    .pipe ngAnnotate single_quotes: yes
-    .pipe sourcemaps.write()
+    .pipe $.sourcemaps.init()
+    .pipe $.coffee bare: yes
+    .pipe $.ngAnnotate single_quotes: yes
+    .pipe $.sourcemaps.write()
     .pipe gulp.dest TEMP_DIR.scripts
     .pipe browserSync.reload stream: yes
 
@@ -79,7 +73,7 @@ gulp.task 'bower:karma', ->
 # Compile stylus, reload
 gulp.task 'styles', ->
   gulp.src FILES.styles
-    .pipe stylus()
+    .pipe $.stylus()
     .pipe gulp.dest TEMP_DIR.styles
     .pipe browserSync.reload stream: yes
 
@@ -87,8 +81,8 @@ gulp.task 'styles', ->
 # Compile jade templates, reload
 gulp.task 'templates', ->
   gulp.src FILES.templates
-    .pipe jade pretty: yes
-    .pipe ngTemplatecache root: DIR.templates
+    .pipe $.jade pretty: yes
+    .pipe $.angularTemplatecache root: DIR.templates
     .pipe gulp.dest TEMP_DIR.scripts
     .pipe browserSync.reload stream: yes
 
@@ -96,17 +90,17 @@ gulp.task 'templates', ->
 # Compile jade index, inject styles and scripts, reload
 gulp.task 'index', ['bower', 'scripts', 'styles'], ->
   gulp.src FILES.index
-    .pipe jade pretty: yes
-    .pipe inject(
+    .pipe $.jade pretty: yes
+    .pipe $.inject(
       gulp.src TEMP_FILES.vendors, cwd: DIR.tmp
-        .pipe ngFilesort()
+        .pipe $.angularFilesort()
       name: 'bower'
     )
-    .pipe inject(eventStream.merge(
+    .pipe $.inject(eventStream.merge(
       gulp.src TEMP_FILES.styles, cwd: DIR.tmp, read: no
     ,
       gulp.src TEMP_FILES.scripts, cwd: DIR.tmp
-        .pipe ngFilesort()
+        .pipe $.angularFilesort()
     ))
     .pipe gulp.dest DIR.tmp
     .pipe browserSync.reload stream: yes
@@ -141,12 +135,12 @@ gulp.task 'karma', ['bower:karma', 'scripts'], (cb) ->
 
 
 # Protractor e2e testing
-gulp.task 'webdriver-update', protractor.webdriver_update
-gulp.task 'webdriver_standalone', protractor.webdriver_standalone
+gulp.task 'webdriver-update',     $.protractor.webdriver_update
+gulp.task 'webdriver_standalone', $.protractor.webdriver_standalone
 
 gulp.task 'protractor', ['serve:protractor', 'webdriver-update'], ->
   gulp.src 'test/e2e/**/*.coffee'
-    .pipe protractor.protractor(
+    .pipe $.protractor.protractor(
       configFile: TEST_CONF.protractor
       args: [ '--baseUrl', 'http://localhost:3000' ]
     )
