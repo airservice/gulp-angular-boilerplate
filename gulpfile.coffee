@@ -17,6 +17,10 @@ browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
 historyApiFallback  = require 'connect-history-api-fallback'
 
+
+# -------------------- VARS -------------------- #
+
+
 DIR =
   tmp:              '.tmp'
   templates:        '/templates'
@@ -42,7 +46,7 @@ TEST_CONF =
   protractor:       "#{__dirname}/protractor.conf.coffee"
 
 
-# -------------------- Development -------------------- #
+# -------------------- TASKS -------------------- #
 
 
 # Clean tmp
@@ -64,6 +68,12 @@ gulp.task 'scripts', ->
 # Copy bower files
 gulp.task 'bower', ->
   gulp.src bowerFiles()
+    .pipe gulp.dest TEMP_DIR.vendors
+
+
+# Copy bower test files
+gulp.task 'bower:karma', ->
+  gulp.src bowerFiles includeDev: true
     .pipe gulp.dest TEMP_DIR.vendors
 
 
@@ -113,7 +123,7 @@ gulp.task 'serve', ['compile', 'watch'], ->
 
 
 # Launch server for testing
-gulp.task 'serve:e2e', ['compile', 'watch'], ->
+gulp.task 'serve:protractor', ['compile', 'watch'], ->
   browserSync
     notify: no
     open: false
@@ -122,11 +132,20 @@ gulp.task 'serve:e2e', ['compile', 'watch'], ->
       middleware: [ historyApiFallback ]
 
 
-# e2e test using protractor
+# Karma unit testing
+gulp.task 'karma', ['bower:karma', 'scripts'], (cb) ->
+  karma.server.start {
+    singleRun: true
+    autoWatch: false
+    configFile: TEST_CONF.karma
+  }, cb
+
+
+# Protractor e2e testing
 gulp.task 'webdriver-update', protractor.webdriver_update
 gulp.task 'webdriver_standalone', protractor.webdriver_standalone
 
-gulp.task 'protractor', ['serve:e2e', 'webdriver-update'], ->
+gulp.task 'protractor', ['serve:protractor', 'webdriver-update'], ->
   gulp.src 'test/e2e/**/*.coffee'
     .pipe protractor.protractor(
       configFile: TEST_CONF.protractor
@@ -136,15 +155,6 @@ gulp.task 'protractor', ['serve:e2e', 'webdriver-update'], ->
       throw err
     .on 'end', ->
       browserSync.exit()
-
-
-# Test using karma
-gulp.task 'test', ['scripts'], (cb) ->
-  karma.server.start {
-    singleRun: true
-    autoWatch: false
-    configFile: TEST_CONF.karma
-  }, cb
 
 
 # Watch for changes
