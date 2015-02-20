@@ -8,11 +8,12 @@ browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
 historyApiFallback  = require 'connect-history-api-fallback'
 
+$                   = loadPlugins()
+reload              = browserSync.reload
 
-# -------------------- VARS -------------------- #
 
+# -------------------- PATHS -------------------- #
 
-$ = loadPlugins()
 
 DIR =
   tmp:              '.tmp'
@@ -55,7 +56,7 @@ gulp.task 'scripts', ->
     .pipe $.ngAnnotate single_quotes: yes
     .pipe $.sourcemaps.write()
     .pipe gulp.dest TEMP_DIR.scripts
-    .pipe browserSync.reload stream: yes
+    .pipe reload stream: yes
 
 
 # Copy bower files
@@ -75,7 +76,7 @@ gulp.task 'styles', ->
   gulp.src FILES.styles
     .pipe $.stylus()
     .pipe gulp.dest TEMP_DIR.styles
-    .pipe browserSync.reload stream: yes
+    .pipe reload stream: yes
 
 
 # Compile jade templates, reload
@@ -84,7 +85,7 @@ gulp.task 'templates', ->
     .pipe $.jade pretty: yes
     .pipe $.angularTemplatecache root: DIR.templates
     .pipe gulp.dest TEMP_DIR.scripts
-    .pipe browserSync.reload stream: yes
+    .pipe reload stream: yes
 
 
 # Compile jade index, inject styles and scripts, reload
@@ -103,7 +104,7 @@ gulp.task 'index', ['bower', 'scripts', 'styles'], ->
         .pipe $.angularFilesort()
     ))
     .pipe gulp.dest DIR.tmp
-    .pipe browserSync.reload stream: yes
+    .pipe reload stream: yes
 
 
 # Launch browser sync server
