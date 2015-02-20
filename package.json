@@ -26,7 +26,6 @@
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "main-bower-files": "^2.5.0",
-    "open": "0.0.5",
     "protractor": "^1.6.1"
   }
 }

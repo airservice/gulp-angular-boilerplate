@@ -10,7 +10,6 @@ ngFilesort          = require 'gulp-angular-filesort'
 ngTemplatecache     = require 'gulp-angular-templatecache'
 
 del                 = require 'del'
-open                = require 'open'
 karma               = require 'karma'
 eventStream         = require 'event-stream'
 browserSync         = require 'browser-sync'
