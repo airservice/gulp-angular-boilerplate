@@ -1,0 +1,28 @@
+{
+  "dir": {
+    "tmp":              ".tmp",
+    "templates":        "/templates"
+  },
+
+  "files": {
+    "index":            "app/index.jade",
+    "styles":           "app/styles/**/*.styl",
+    "scripts":          "app/scripts/**/*.coffee",
+    "templates":        "app/templates/**/*.jade",
+
+    "karma":            "karma.conf.coffee",
+    "protractor":       "protractor.conf.coffee"
+  },
+
+  "tmpDir": {
+    "styles":           ".tmp/styles",
+    "scripts":          ".tmp/scripts",
+    "vendors":          ".tmp/scripts/vendors"
+  },
+
+  "tmpFiles": {
+    "styles":           "styles/**/*.css",
+    "vendors":          "scripts/vendors/*.js",
+    "scripts":          ["scripts/**/*.js", "!scripts/vendors/*.js"]
+  }
+}
