@@ -51,6 +51,7 @@ gulp.task 'clean', (cb) ->
 # Compile coffee, generate source maps, reload
 gulp.task 'scripts', ->
   gulp.src FILES.scripts
+    .pipe $.changed TEMP_DIR.scripts, extension: '.js'
     .pipe $.sourcemaps.init()
     .pipe $.coffee bare: yes
     .pipe $.ngAnnotate single_quotes: yes
@@ -74,6 +75,7 @@ gulp.task 'bower:karma', ->
 # Compile stylus, reload
 gulp.task 'styles', ->
   gulp.src FILES.styles
+    .pipe $.changed TEMP_DIR.styles, extension: '.css'
     .pipe $.stylus()
     .pipe gulp.dest TEMP_DIR.styles
     .pipe reload stream: yes
@@ -82,6 +84,7 @@ gulp.task 'styles', ->
 # Compile jade templates, reload
 gulp.task 'templates', ->
   gulp.src FILES.templates
+    .pipe $.changed TEMP_DIR.scripts, extension: '.js'
     .pipe $.jade pretty: yes
     .pipe $.angularTemplatecache root: DIR.templates
     .pipe gulp.dest TEMP_DIR.scripts
