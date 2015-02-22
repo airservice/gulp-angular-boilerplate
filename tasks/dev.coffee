@@ -63,14 +63,14 @@ gulp.task 'index', ['bower', 'scripts', 'styles'], ->
   gulp.src config.files.index
     .pipe $.jade pretty: yes
     .pipe $.inject(
-      gulp.src config.tmpFiles.vendors, cwd: config.dir.tmp
+      gulp.src config.outputFiles.vendors, cwd: config.dir.tmp
         .pipe $.angularFilesort()
       name: 'bower'
     )
     .pipe $.inject(eventStream.merge(
-      gulp.src config.tmpFiles.styles, cwd: config.dir.tmp, read: no
+      gulp.src config.outputFiles.styles, cwd: config.dir.tmp, read: no
     ,
-      gulp.src config.tmpFiles.scripts, cwd: config.dir.tmp
+      gulp.src config.outputFiles.scripts, cwd: config.dir.tmp
         .pipe $.angularFilesort()
     ))
     .pipe gulp.dest config.dir.tmp

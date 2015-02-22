@@ -1,7 +1,19 @@
 {
   "dir": {
     "tmp":              ".tmp",
+    "build":            "build",
     "templates":        "/templates"
+  },
+
+  "tmpDir": {
+    "styles":           ".tmp/styles",
+    "scripts":          ".tmp/scripts",
+    "vendors":          ".tmp/scripts/vendors"
+  },
+
+  "buildDir": {
+    "styles":           "build/styles",
+    "scripts":          "build/scripts"
   },
 
   "files": {
@@ -14,13 +26,7 @@
     "protractor":       "protractor.conf.coffee"
   },
 
-  "tmpDir": {
-    "styles":           ".tmp/styles",
-    "scripts":          ".tmp/scripts",
-    "vendors":          ".tmp/scripts/vendors"
-  },
-
-  "tmpFiles": {
+  "outputFiles": {
     "styles":           "styles/**/*.css",
     "vendors":          "scripts/vendors/*.js",
     "scripts":          ["scripts/**/*.js", "!scripts/vendors/*.js"]
