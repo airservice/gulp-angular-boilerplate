@@ -11,23 +11,23 @@
 angular.module('AppModule')
   .controller 'MainController', ($scope) ->
     $scope.stackList = [
-      'title': 'Gulp'
-      'url': 'http://gulpjs.com/'
-      'description': 'The streaming build system'
+      'title':        'Gulp'
+      'website':      'http://gulpjs.com/'
+      'description':  'The streaming build system'
     ,
-      'title': 'AngularJS'
-      'url': 'https://angularjs.org/'
-      'description': 'HTML enhanced for web apps!'
+      'title':        'AngularJS'
+      'website':      'https://angularjs.org/'
+      'description':  'HTML enhanced for web apps!'
     ,
-      'title': 'Jade'
-      'url': 'http://jade-lang.com/'
-      'description': 'Clean, whitespace sensitive syntax for writing HTML'
+      'title':        'Jade'
+      'website':      'http://jade-lang.com/'
+      'description':  'Clean, whitespace sensitive syntax for writing HTML'
     ,
-      'title': 'Stylus'
-      'url': 'http://learnboost.github.io/stylus/'
-      'description': 'Expressive, robust, feature-rich CSS preprocessor'
+      'title':        'Stylus'
+      'website':      'http://learnboost.github.io/stylus/'
+      'description':  'Expressive, robust, feature-rich CSS preprocessor'
     ,
-      'title': 'CoffeeScript'
-      'url': 'http://coffeescript.org/'
-      'description': 'A little language that compiles into JavaScript'
+      'title':        'CoffeeScript'
+      'website':      'http://coffeescript.org/'
+      'description':  'A little language that compiles into JavaScript'
     ]
