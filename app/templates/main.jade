@@ -1,5 +1,5 @@
-a.stack(ng-repeat="stack in ::stackList" ng-href="{{stack.url}}" target="_blank")
+a.stack(ng-repeat="stack in ::stackList" ng-href="{{::stack.url}}" target="_blank")
   .title
-    | {{stack.title}}
+    | {{::stack.title}}
   .description
-    | {{stack.description}}
+    | {{::stack.description}}
