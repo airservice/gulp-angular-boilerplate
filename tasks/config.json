@@ -8,7 +8,8 @@
   "tmpDir": {
     "styles":           ".tmp/styles",
     "scripts":          ".tmp/scripts",
-    "vendors":          ".tmp/scripts/vendors"
+    "vendorStyles":     ".tmp/styles/vendors",
+    "vendorScripts":    ".tmp/scripts/vendors"
   },
 
   "buildDir": {
@@ -16,8 +17,9 @@
     "scripts":          "build/scripts"
   },
 
-  "files": {
+  "sourceFiles": {
     "index":            "app/index.jade",
+    "styleRoot":        "app/styles/app.styl",
     "styles":           "app/styles/**/*.styl",
     "scripts":          "app/scripts/**/*.coffee",
     "templates":        "app/templates/**/*.jade",
@@ -27,8 +29,10 @@
   },
 
   "outputFiles": {
-    "styles":           "styles/**/*.css",
-    "vendors":          "scripts/vendors/*.js",
-    "scripts":          ["scripts/**/*.js", "!scripts/vendors/*.js"]
+    "index":           "index.html",
+    "styles":          ["!styles/vendors/*.css", "styles/**/*.css"],
+    "scripts":         ["!scripts/vendors/*.js", "**/*.js"],
+    "vendorStyles":    "styles/vendors/vendors.css",
+    "vendorScripts":   "scripts/vendors/vendors.js"
   }
 }

@@ -6,9 +6,7 @@ module.exports = (config) ->
     frameworks: ['jasmine']
     browsers:   ['PhantomJS']
     files: [
-      '.tmp/scripts/vendors/jquery.js'
-      '.tmp/scripts/vendors/angular.js'
-      '.tmp/scripts/vendors/angular-*.js'
+      '.tmp/scripts/vendors/vendors.js'
 
       '.tmp/scripts/**/*.js'
       'test/specs/**/*.coffee'

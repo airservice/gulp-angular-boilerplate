@@ -4,6 +4,7 @@ gulp                = require 'gulp'
 loadPlugins         = require 'gulp-load-plugins'
 
 del                 = require 'del'
+runSequence         = require 'run-sequence'
 eventStream         = require 'event-stream'
 browserSync         = require 'browser-sync'
 bowerFiles          = require 'main-bower-files'
@@ -11,6 +12,7 @@ historyApiFallback  = require 'connect-history-api-fallback'
 
 $                   = loadPlugins()
 reload              = browserSync.reload
+history             = historyApiFallback()
 
 
 # -------------------- TASKS -------------------- #
@@ -21,10 +23,28 @@ gulp.task 'clean', (cb) ->
   del config.dir.tmp, cb
 
 
+# Copy bower styles
+gulp.task 'bower:styles', ->
+  gulp.src bowerFiles('**/*.css')
+    .pipe $.concat('vendors.css')
+    .pipe gulp.dest config.tmpDir.vendorStyles
+
+
+# Copy bower scripts
+gulp.task 'bower:scripts', ->
+  gulp.src bowerFiles('**/*.js')
+    .pipe $.concat('vendors.js')
+    .pipe gulp.dest config.tmpDir.vendorScripts
+
+
+# Copy bower files
+gulp.task 'bower', (cb) ->
+  runSequence ['bower:styles', 'bower:scripts'], cb
+
+
 # Compile coffee, generate source maps, reload
 gulp.task 'scripts', ->
-  gulp.src config.files.scripts
-    .pipe $.changed config.tmpDir.scripts, extension: '.js'
+  gulp.src config.sourceFiles.scripts
     .pipe $.sourcemaps.init()
     .pipe $.coffee bare: yes
     .pipe $.ngAnnotate single_quotes: yes
@@ -33,16 +53,9 @@ gulp.task 'scripts', ->
     .pipe reload stream: yes
 
 
-# Copy bower files
-gulp.task 'bower', ->
-  gulp.src bowerFiles()
-    .pipe gulp.dest config.tmpDir.vendors
-
-
 # Compile stylus, reload
 gulp.task 'styles', ->
-  gulp.src config.files.styles
-    .pipe $.changed config.tmpDir.styles, extension: '.css'
+  gulp.src config.sourceFiles.styleRoot
     .pipe $.stylus()
     .pipe gulp.dest config.tmpDir.styles
     .pipe reload stream: yes
@@ -50,8 +63,7 @@ gulp.task 'styles', ->
 
 # Compile jade templates, reload
 gulp.task 'templates', ->
-  gulp.src config.files.templates
-    .pipe $.changed config.tmpDir.scripts, extension: '.js'
+  gulp.src config.sourceFiles.templates
     .pipe $.jade pretty: yes
     .pipe $.angularTemplatecache root: config.dir.templates
     .pipe gulp.dest config.tmpDir.scripts
@@ -59,12 +71,22 @@ gulp.task 'templates', ->
 
 
 # Compile jade index, inject styles and scripts, reload
-gulp.task 'index', ['bower', 'scripts', 'styles'], ->
-  gulp.src config.files.index
+gulp.task 'index', ->
+  gulp.src config.sourceFiles.index
     .pipe $.jade pretty: yes
+    .pipe gulp.dest config.dir.tmp
+    .pipe reload stream: yes
+
+
+# Inject styles and scripts, reload
+gulp.task 'inject', ->
+  gulp.src config.outputFiles.index, cwd: config.dir.tmp
     .pipe $.inject(
-      gulp.src config.outputFiles.vendors, cwd: config.dir.tmp
-        .pipe $.angularFilesort()
+      gulp.src config.outputFiles.vendorStyles, cwd: config.dir.tmp, read: no
+      name: 'bower'
+    )
+    .pipe $.inject(
+      gulp.src config.outputFiles.vendorScripts, cwd: config.dir.tmp, read: no
       name: 'bower'
     )
     .pipe $.inject(eventStream.merge(
@@ -77,25 +99,31 @@ gulp.task 'index', ['bower', 'scripts', 'styles'], ->
     .pipe reload stream: yes
 
 
-# Launch browser sync server
-gulp.task 'serve', ['compile', 'watch'], ->
-  browserSync
-    notify: no
-    server:
-      baseDir: config.dir.tmp
-      middleware: [ historyApiFallback ]
-
-
 # Watch for changes
 gulp.task 'watch', ->
-  gulp.watch config.files.index,       ['index']
-  gulp.watch config.files.styles,      ['styles']
-  gulp.watch config.files.scripts,     ['scripts']
-  gulp.watch config.files.templates,   ['templates']
+  gulp.watch config.sourceFiles.index,       ['index']
+  gulp.watch config.sourceFiles.styles,      ['styles']
+  gulp.watch config.sourceFiles.scripts,     ['scripts']
+  gulp.watch config.sourceFiles.templates,   ['templates']
 
 
-# Register tasks
-gulp.task 'compile', ['clean'], ->
-  gulp.start 'scripts', 'styles', 'templates', 'index'
+# Launch browser sync server
+gulp.task 'serve', ->
+  runSequence 'clean', [
+    'index'
+    'bower'
+    'styles'
+    'scripts'
+    'templates'
+  ], 'inject', 'watch', ->
+    browserSync
+      notify: no
+      port: 8080
+      ui: port: 8090
+      server:
+        baseDir: config.dir.tmp
+        middleware: [ history ]
 
+
+# Default
 gulp.task 'default', ['serve']
