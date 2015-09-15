@@ -1,6 +1,6 @@
 # gulp-angular-boilerplate
 
-> Boilerplate to kickstart any project using [gulp](http://gulpjs.com) + [AngularJS](https://angularjs.org) + [Jade](http://jade-lang.com) + [Stylus](http://learnboost.github.io/stylus) + [CoffeeScript](http://coffeescript.org)
+> Boilerplate to kickstart any project using [Gulp](http://gulpjs.com) + [AngularJS](https://angularjs.org) + [Jade](http://jade-lang.com) + [Stylus](http://learnboost.github.io/stylus) + [CoffeeScript](http://coffeescript.org)
 
 
 ## Setup
